@@ -1,19 +1,29 @@
 'use strict';
 
-// Estabelece a conexão com o servidor WebSocket
+// Conecta ao servidor WebSocket
 const socket = new WebSocket('ws://localhost:8080');
 
-// Função para salvar os valores no localStorage e enviar via WebSocket
+socket.onopen = function() {
+    console.log('Connected to WebSocket');
+};
+
+socket.onmessage = function(event) {
+    console.log('Received from server:', event.data);
+    const { key, value } = JSON.parse(event.data);
+    localStorage.setItem(key, value);
+    carregarValores(); // Atualiza os inputs com o valor do localStorage
+};
+
+// Função para salvar os valores no localStorage e enviar para o WebSocket
 function salvarValores() {
     const inputs = document.querySelectorAll(".inputValor");
     inputs.forEach(input => {
-        localStorage.setItem(input.dataset.key, input.value);
-
-        // Enviar os dados atualizados via WebSocket
-        socket.send(JSON.stringify({
-            key: input.dataset.key,
-            value: input.value
-        }));
+        const key = input.dataset.key;
+        const value = input.value;
+        localStorage.setItem(key, value);
+        
+        // Envia os dados para o servidor WebSocket
+        socket.send(JSON.stringify({ key, value }));
     });
 }
 
@@ -27,19 +37,6 @@ function carregarValores() {
         }
     });
 }
-
-// Atualiza o localStorage e a interface ao receber uma mensagem via WebSocket
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    localStorage.setItem(data.key, data.value);
-
-    // Atualiza o campo correspondente na interface do usuário
-    const input = document.querySelector(`.inputValor[data-key='${data.key}']`);
-    if (input) {
-        input.value = data.value;
-        calcularPlacas();  // Recalcula as placas com os novos valores
-    }
-};
 
 document.getElementById("botaoAlterarValor").addEventListener("click", function() {
     const inputs = document.querySelectorAll(".inputValor");
@@ -64,7 +61,6 @@ document.getElementById("botaoAlterarValor").addEventListener("click", function(
 // Carrega os valores do localStorage ao carregar a página
 window.addEventListener("load", carregarValores);
 
-// Função para calcular as placas
 function calcularPlacas() {
     const itens = ["SAL", "MILH", "LEIT", "HOT", "INT", "HAMB", "CACAU", "CEBOL", "BATAT", "FAROF", "v.SAL", "v.MILH", "v.LEIT"];
     const capacidadePlaca = { "SAL": 25, "MILH": 25, "LEIT": 25, "HOT": 20, "INT": 20, "HAMB": 20, "CACAU": 25, "CEBOL": 25, "BATAT": 25, "FAROF": 20, "v.SAL": 20, "v.MILH": 20, "v.LEIT": 20 };
