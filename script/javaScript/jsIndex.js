@@ -8,10 +8,14 @@ socket.onopen = function() {
 };
 
 socket.onmessage = function(event) {
-    console.log('Received from server:', event.data);
-    const { key, value } = JSON.parse(event.data);
-    localStorage.setItem(key, value);
-    carregarValores(); // Atualiza os inputs com o valor do localStorage
+    event.data.text().then((message) => {
+        console.log('Received from server:', message);
+        const { key, value } = JSON.parse(message);
+        localStorage.setItem(key, value);
+        carregarValores(); // Atualiza os inputs com o valor do localStorage
+    }).catch(error => {
+        console.error('Error processing WebSocket message:', error);
+    });
 };
 
 // Função para salvar os valores no localStorage e enviar para o WebSocket
