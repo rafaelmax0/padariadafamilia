@@ -1,7 +1,7 @@
 'use strict';
 
-// Conecta ao servidor WebSocket
-const socket = new WebSocket('ws://localhost:8080');
+// Substitua '192.168.x.x' pelo endereço IP local da sua máquina
+const socket = new WebSocket('ws://192.168.100.3:8080');
 
 socket.onopen = function() {
     console.log('Connected to WebSocket');
