@@ -52,7 +52,7 @@ function carregarValores() {
     });
 }
 
-document.getElementById("botaoAlterarValor").addEventListener("click", function() {
+document.getElementById("otaoAlterarValor").addEventListener("click", function() {
     const inputs = document.querySelectorAll(".inputValor");
     let allDisabled = true;
 
