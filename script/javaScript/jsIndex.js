@@ -1,44 +1,20 @@
-'use strict'
+'use strict';
 
-// Conectando ao WebSocket (substitua "ws://localhost:8080" pelo URL do seu servidor WebSocket)
+// Estabelece a conexão com o servidor WebSocket
 const socket = new WebSocket('ws://localhost:8080');
-
-// Função para enviar dados através do WebSocket
-function enviarDados(data) {
-    socket.send(JSON.stringify(data));
-}
-
-// Recebendo dados via WebSocket e atualizando o localStorage
-socket.addEventListener('message', function(event) {
-    const dadosRecebidos = JSON.parse(event.data);
-    Object.keys(dadosRecebidos).forEach(key => {
-        localStorage.setItem(key, dadosRecebidos[key]);
-        // Atualiza o valor na página
-        const input = document.querySelector(`input[data-key='${key}']`);
-        if (input) {
-            input.value = dadosRecebidos[key];
-            input.disabled = true; // Desativa o input para evitar alterações locais não intencionais
-        }
-    });
-
-    // Recalcular as placas após a atualização dos valores
-    calcularPlacas();
-});
 
 // Função para salvar os valores no localStorage e enviar via WebSocket
 function salvarValores() {
     const inputs = document.querySelectorAll(".inputValor");
-    let dadosParaEnviar = {};
-
     inputs.forEach(input => {
-        const key = input.dataset.key;
-        const value = input.value;
-        localStorage.setItem(key, value);
-        dadosParaEnviar[key] = value;
-    });
+        localStorage.setItem(input.dataset.key, input.value);
 
-    // Enviar os dados para o servidor WebSocket
-    enviarDados(dadosParaEnviar);
+        // Enviar os dados atualizados via WebSocket
+        socket.send(JSON.stringify({
+            key: input.dataset.key,
+            value: input.value
+        }));
+    });
 }
 
 // Função para carregar os valores do localStorage
@@ -51,6 +27,19 @@ function carregarValores() {
         }
     });
 }
+
+// Atualiza o localStorage e a interface ao receber uma mensagem via WebSocket
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    localStorage.setItem(data.key, data.value);
+
+    // Atualiza o campo correspondente na interface do usuário
+    const input = document.querySelector(`.inputValor[data-key='${data.key}']`);
+    if (input) {
+        input.value = data.value;
+        calcularPlacas();  // Recalcula as placas com os novos valores
+    }
+};
 
 document.getElementById("botaoAlterarValor").addEventListener("click", function() {
     const inputs = document.querySelectorAll(".inputValor");
@@ -75,6 +64,7 @@ document.getElementById("botaoAlterarValor").addEventListener("click", function(
 // Carrega os valores do localStorage ao carregar a página
 window.addEventListener("load", carregarValores);
 
+// Função para calcular as placas
 function calcularPlacas() {
     const itens = ["SAL", "MILH", "LEIT", "HOT", "INT", "HAMB", "CACAU", "CEBOL", "BATAT", "FAROF", "v.SAL", "v.MILH", "v.LEIT"];
     const capacidadePlaca = { "SAL": 25, "MILH": 25, "LEIT": 25, "HOT": 20, "INT": 20, "HAMB": 20, "CACAU": 25, "CEBOL": 25, "BATAT": 25, "FAROF": 20, "v.SAL": 20, "v.MILH": 20, "v.LEIT": 20 };
