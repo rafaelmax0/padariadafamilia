@@ -3,26 +3,24 @@ const socket = new WebSocket('wss://11cb-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7
 
 // Evento chamado quando a conexão WebSocket é aberta
 socket.onopen = function() {
-    console.log('Connected to WebSocket');
+    console.log('Conectado ao WebSocket');
 };
 
 // Evento chamado quando uma mensagem é recebida pelo WebSocket
 socket.onmessage = function(event) {
-    // Converte o evento de mensagem em texto para garantir que seja processado corretamente
-    const message = typeof event.data === 'string' ? event.data : '';
-    
-    if (message) {
-        try {
-            // Parse da mensagem recebida para um objeto JSON
-            const { key, value } = JSON.parse(message);
-            console.log('Received from server:', message);
-            
-            // Atualiza o localStorage com os valores recebidos do WebSocket
-            localStorage.setItem(key, value);
-            carregarValores(); // Atualiza os inputs com os valores do localStorage
-        } catch (error) {
-            console.error('Error processing WebSocket message:', error);
-        }
+    // Processa a mensagem recebida
+    try {
+        const message = JSON.parse(event.data);
+        console.log('Recebido do servidor:', message);
+        
+        // Atualiza o localStorage com os valores recebidos do WebSocket
+        const { key, value } = message;
+        localStorage.setItem(key, value);
+
+        // Atualiza os inputs na interface
+        carregarValores(); 
+    } catch (error) {
+        console.error('Erro ao processar a mensagem do WebSocket:', error);
     }
 };
 
@@ -35,10 +33,9 @@ function salvarValores() {
 
         // Salva o valor no localStorage
         localStorage.setItem(key, value);
-        
-        // Verifica se o WebSocket está aberto antes de enviar a mensagem
+
+        // Envia os dados para o servidor WebSocket
         if (socket.readyState === WebSocket.OPEN) {
-            // Envia os dados para o servidor WebSocket
             socket.send(JSON.stringify({ key, value }));
         } else {
             console.error('WebSocket não está conectado.');
@@ -74,7 +71,7 @@ document.getElementById("botaoAlterarValor").addEventListener("click", function(
     } else {
         inputs.forEach(input => input.disabled = true);
         this.textContent = "CONFIGURAÇÃO";
-        salvarValores();
+        salvarValores(); // Salva os valores e envia para o WebSocket
     }
 });
 
