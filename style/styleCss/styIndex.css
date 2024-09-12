@@ -53,6 +53,9 @@ body {
 
 
 
+#container {
+    overflow-x: auto;
+}
 #tabelaProducao {
     border-collapse: collapse;
     position: relative;

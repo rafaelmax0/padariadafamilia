@@ -1,7 +1,4 @@
-'use strict';
-
-// Substitua '192.168.x.x' pelo endereço IP local da sua máquina
-const socket = new WebSocket('ws://192.168.100.3:8080');
+const socket = new WebSocket('wss://37ff-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7.ngrok-free.app');
 
 socket.onopen = function() {
     console.log('Connected to WebSocket');
