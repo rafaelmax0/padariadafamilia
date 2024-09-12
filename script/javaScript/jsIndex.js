@@ -1,5 +1,5 @@
 // Conectar ao WebSocket utilizando o URL do ngrok
-const socket = new WebSocket('wss://37ff-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7.ngrok-free.app');
+const socket = new WebSocket('wss://11cb-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7.ngrok-free.app');
 
 // Evento chamado quando a conexão WebSocket é aberta
 socket.onopen = function() {
