@@ -1,24 +1,22 @@
-// Conectar ao WebSocket utilizando o URL do ngrok
+// Substitua '<SEU-URL-NGROK>' pelo URL do ngrok gerado
 const socket = new WebSocket('wss://11cb-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7.ngrok-free.app');
 
-// Evento chamado quando a conexão WebSocket é aberta
 socket.onopen = function() {
     console.log('Conectado ao WebSocket');
 };
 
-// Evento chamado quando uma mensagem é recebida pelo WebSocket
+// Ao receber uma mensagem do WebSocket
 socket.onmessage = function(event) {
-    // Processa a mensagem recebida
     try {
-        const message = JSON.parse(event.data);
+        const message = JSON.parse(event.data); // Recebe e processa a mensagem do WebSocket
         console.log('Recebido do servidor:', message);
-        
-        // Atualiza o localStorage com os valores recebidos do WebSocket
+
+        // Atualiza o localStorage com os valores recebidos
         const { key, value } = message;
         localStorage.setItem(key, value);
 
-        // Atualiza os inputs na interface
-        carregarValores(); 
+        // Atualiza os inputs com os valores do localStorage
+        carregarValores();
     } catch (error) {
         console.error('Erro ao processar a mensagem do WebSocket:', error);
     }
@@ -43,7 +41,7 @@ function salvarValores() {
     });
 }
 
-// Função para carregar os valores do localStorage
+// Função para carregar os valores do localStorage e exibir nos inputs
 function carregarValores() {
     const inputs = document.querySelectorAll(".inputValor");
     inputs.forEach(input => {
@@ -91,7 +89,7 @@ function calcularPlacas() {
             totalPaes += parseInt(input.value) || 0;
         });
 
-        // Calcular o número de placas necessário
+        // Calcula o número de placas necessário
         const numPlacas = totalPaes / capacidadePlaca[item];
         document.getElementById(`placa${item}`).value = numPlacas.toFixed(2);
     });
