@@ -10,8 +10,9 @@
 
 
 
-body {
-    background: rgba(211, 211, 211, 0.5);
+body, html {
+    height: 100%;
+    overflow: hidden;
 }
 
 
@@ -20,17 +21,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    color: red;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.001) 100%);
+    padding: 25px;
 }
 #logo, .textoOpcaoMenu {
     font-family: Arial;
     font-weight: bold;
     padding: 20px;
     text-decoration: none;
+    border-radius: 10px;
+    color: rgba(241, 232, 232, 0.938)
 }
 .textoOpcaoMenu:hover {
-    background: rgba(211, 211, 211, 0.9);
+    background: rgba(184, 129, 129, 0.9);
 }
 #divOpcaoMenu {
     display: flex;
@@ -43,62 +46,14 @@ body {
 
 
 
-#textoProducaoManha {
-    font-family: serif;
-    text-align: center;
-    font-size: 2em;
-    padding: 10px;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-
-
-#container {
-    overflow-x: auto;
-}
-#tabelaProducao {
-    border-collapse: collapse;
-    position: relative;
-    margin: auto;
-}
-#theadProducao {
-    background: gray;
-    color: white;
-}
-#theadProducao > tr > th {
-    position: sticky;
-    top: -1px;
-    background: gray;
-}
-#tbodyProducao tr:nth-child(2n) {
-    background: lightgray;
-}
-#tbodyProducao tr:nth-child(2n) td input {
-    background: lightgray;
-}
-.thEstilo, .tdEstilo {
-    border: 1px solid black;
-    font-size: 1.3em;
-}
-.inputValor {
-    max-width: 82px;
-    border: none;
-    font-size: 1.3em;
-    cursor: pointer;
-}
-
-
-
-#sectionBotaoAlterarValor {
-    display: flex;
-    justify-content: center;
-}
-#botaoAlterarValor {
-    padding: 10px;
-    border-radius: 10px;
-    margin: 10px;
-    font-weight: bold;
-    cursor: pointer;
+#background-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    max-width: 100%;
+    z-index: -1;
+    object-fit: cover;
 }
 
 
@@ -109,5 +64,8 @@ footer {
     padding: 10px;
     font-weight: bold;
     text-align: center;
-    margin-top: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }

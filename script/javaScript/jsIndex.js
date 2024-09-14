@@ -1,11 +1,11 @@
-// Substitua '<SEU-URL-NGROK>' pelo URL do ngrok gerado
+// Exemplo de URL fornecida pelo Ngrok
 const socket = new WebSocket('wss://11cb-2804-51c8-3000-2700-ad32-fde8-15d0-a2c7.ngrok-free.app');
 
+// WebSocket agora conectará à URL pública gerada pelo Ngrok
 socket.onopen = function() {
-    console.log('Conectado ao WebSocket');
+    console.log('Conectado ao WebSocket via Ngrok');
 };
 
-// Ao receber uma mensagem do WebSocket
 socket.onmessage = function(event) {
     try {
         const message = JSON.parse(event.data); // Recebe e processa a mensagem do WebSocket
